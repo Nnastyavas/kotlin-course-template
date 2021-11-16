@@ -1,6 +1,5 @@
 package lab1
 
-import java.lang.Exception
 
 enum class Alignment{
     LEFT,
@@ -14,7 +13,7 @@ fun alignText(
     lineWidth: Int = 80
 ): String {
     if (lineWidth < 1)
-        throw Exception("The string does not exist")
+        throw IllegalArgumentException("The string does not exist")
     val alignTxt: MutableList<String> = splitText(text, lineWidth)
     return when (alignment) {
         Alignment.LEFT -> alignLeft(alignTxt, lineWidth)
@@ -33,7 +32,7 @@ fun splitText(
     var indexToSplit: Int
     while (curText.isNotEmpty()) {
         indexToSplit = curText.indexOf('\n')
-        if (indexToSplit !== -1 && indexToSplit <= lineWidth)
+        if (indexToSplit != -1 && indexToSplit <= lineWidth)
             splitText.add (curText.substring(0, indexToSplit))
         else {
             if (curText.length > lineWidth) {
@@ -51,19 +50,19 @@ fun splitText(
     return splitText
 }
 
-fun alignLeft(alignText: MutableList<String>, lineWidth: Int): String {
+private fun alignLeft(alignText: MutableList<String>, lineWidth: Int): String {
     for (i in 0 until alignText.size)
         alignText[i] = alignText[i].padEnd(lineWidth)
     return alignText.joinToString(separator = "\n")
 }
 
-fun alignRight(alignText: MutableList<String>, lineWidth: Int): String {
+private fun alignRight(alignText: MutableList<String>, lineWidth: Int): String {
     for (i in 0 until alignText.size)
         alignText[i] = alignText[i].padStart(lineWidth)
     return alignText.joinToString(separator = "\n")
 }
 
-fun alignCenter(alignText: MutableList<String>, lineWidth: Int): String {
+private fun alignCenter(alignText: MutableList<String>, lineWidth: Int): String {
     for(i in 0 until alignText.size){
         val start = lineWidth - (lineWidth - alignText[i].length)/2
         alignText[i] = alignText[i].padStart(start).padEnd(lineWidth)

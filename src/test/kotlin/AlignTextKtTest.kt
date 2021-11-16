@@ -9,17 +9,17 @@ import java.lang.Exception
 internal class AlignTextKtTest {
 
     @Test
-    fun TestException() {
+    fun testException() {
         try {
             alignText("абвгд", Alignment.LEFT, 0)
-        } catch (e: Exception) {
+        } catch (e: IllegalArgumentException) {
             assertEquals("The string does not exist", e.message)
         }
 
     }
 
     @Test
-    fun TestLongWord() {
+    fun testLongWord() {
         val string: String = alignText(
             "Парацетамол", Alignment.LEFT, 3)
         val expected: String = """
@@ -36,7 +36,7 @@ internal class AlignTextKtTest {
     }
 
     @Test
-    fun TestAlignLeft() {
+    fun testAlignLeft() {
         val string: String = alignText(
             "Я помню чудное мгновенье: " +
                     "Передо мной явилась ты, " +
@@ -55,7 +55,7 @@ internal class AlignTextKtTest {
     }
 
     @Test
-    fun TestAlignRight() {
+    fun testAlignRight() {
         val string: String = alignText(
             "Я помню чудное мгновенье: " +
                     "Передо мной явилась ты, " +
@@ -76,7 +76,7 @@ internal class AlignTextKtTest {
     }
 
     @Test
-    fun TestAlignCenter() {
+    fun testAlignCenter() {
 
             val string: String =
                 alignText("Я помню чудное мгновенье: " +
