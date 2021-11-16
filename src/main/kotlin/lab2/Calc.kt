@@ -1,36 +1,31 @@
 package lab2
 
 import java.util.*
-import kotlin.Exception
 import kotlin.math.pow
 
-private var stack: Stack<String> = Stack()
-private var queue = mutableListOf<String>() //выходная полседовательность
-private val operators = hashSetOf("+", "-", "*", "/", "^")
+val operators = hashSetOf("+", "-", "*", "/", "^")
 
 fun parseExpression(Expr: String): Double {
+    val stack: Stack<String> = Stack()
+    val queue = mutableListOf<String>()
     val stringToChange = Expr
         .replace(" ", "")
         .replaceFirst("-(", "0-(")
-    /*stringToChange.forEach {
-        print(it)
-    }*/
-    if (stringToChange.isEmpty())
-        throw Exception("Error. List is empty.")
 
-    getPostFixEx(stringToChange)
-    return calcPostFix()
+    if (stringToChange.isEmpty())
+        throw IllegalArgumentException("Error. Expression can not be empty.")
+
+    getPostFixEx(stringToChange, stack, queue)
+    return calcPostFix(queue)
 }
 
-private fun getPostFixEx(Expr: String) {
-    queue.clear()
-    stack.clear()
+private fun getPostFixEx(Expr: String, stack: Stack<String>, queue: MutableList<String>) {
     calcBracket(Expr)
     var index = 0
     while (index < Expr.length) {
         when (Expr[index]) {
             '(' -> stack.push(Expr[index].toString())
-            ')' -> if (Expr.contains('(')) pop()
+            ')' -> if (Expr.contains('(')) pop(stack, queue)
             in '0'..'9' -> {
                 val indexEnd = findNumber(Expr, index)
                 queue.add(Expr.substring(index, indexEnd + 1))
@@ -46,7 +41,7 @@ private fun getPostFixEx(Expr: String) {
                 } else {
                     if (stack.isEmpty() || stack.last() == "(") stack.push(Expr[index].toString())
                     else if (stack.last().contains('*') || stack.last().contains('/')) {
-                        pop()
+                        pop(stack, queue)
                         stack.push(Expr[index].toString())
                     } else {
                         queue.add(stack.last())
@@ -55,31 +50,26 @@ private fun getPostFixEx(Expr: String) {
                 }
             '*', '/' -> {
                 if (stack.isNotEmpty() && (stack.last() == "*" || stack.last() == "/")) {
-                    pop()
+                    pop(stack, queue)
                 }
                 if (Expr[index] != Expr.last() && (Expr[index + 1] == '*' || Expr[index + 1] == '/'))
-                    throw Exception("Incorrect sequence of operations")
+                    throw IllegalArgumentException("Incorrect sequence of operations")
                 if (Expr[index] == Expr.last() || Expr[index] == Expr.first())
-                    throw Exception("Wrong the first or the last symbol")
+                    throw IllegalArgumentException("Wrong the first or the last symbol")
                 stack.push(Expr[index].toString())
             }
             '^' -> {
                 stack.push(Expr[index].toString())
                 if (Expr[index] == Expr.last() || Expr[index] == Expr.first())
-                    throw Exception("Wrong the first or the last symbol")
+                    throw IllegalArgumentException("Wrong the first or the last symbol")
             }
-            else -> throw Exception("Wrong symbols in input")
+            else -> throw IllegalArgumentException("Wrong symbols in input")
         }
         index++
     }
 
     while (stack.isNotEmpty())
         queue.add(stack.pop())
-
-    /*println("Постфиксное выражение: ")
-    queue.forEach {
-        print(it)
-    } println()*/
 }
 
 private fun calcBracket(Expr: String) {
@@ -89,10 +79,10 @@ private fun calcBracket(Expr: String) {
         if (it == ')') count--
     }
     if (count != 0)
-        throw Exception("Wrong brackets")
+        throw IllegalArgumentException("Wrong brackets")
 }
 
-private fun pop() {
+private fun pop(stack: Stack<String>, queue: MutableList<String>) {
     for (i in stack.lastIndex downTo 0) {
         if (stack.peek() == "(") {
             stack.pop()
@@ -112,7 +102,7 @@ private fun findNumber(str: String, index: Int): Int {
     return indexEnd
 }
 
-private fun calcPostFix(): Double {
+private fun calcPostFix(queue: MutableList<String>): Double {
     val list = mutableListOf<Double>()
     for (i in queue) {
         when {

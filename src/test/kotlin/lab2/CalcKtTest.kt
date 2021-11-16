@@ -1,7 +1,6 @@
 package lab2
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
-import kotlin.Exception
 
 
 internal class CalcKtTest {
@@ -9,8 +8,8 @@ internal class CalcKtTest {
     fun emptyString(){
         try {
             parseExpression("     ")
-        } catch (e: Exception) {
-            assertEquals("Error. List is empty.", e.message)
+        } catch (e: IllegalArgumentException) {
+            assertEquals("Error. Expression can not be empty.", e.message)
         }
     }
 
@@ -18,7 +17,7 @@ internal class CalcKtTest {
     fun calcBracket() {
         try {
             parseExpression("(3+2)*4)")
-        } catch (e: Exception) {
+        } catch (e: IllegalArgumentException) {
             assertEquals("Wrong brackets", e.message)
         }
     }
@@ -27,7 +26,7 @@ internal class CalcKtTest {
     fun wrongLetters() {
         try {
             parseExpression("3+alksdjfklsdjfkldj+asdfd+3")
-        } catch (e: Exception) {
+        } catch (e: IllegalArgumentException) {
             assertEquals("Wrong symbols in input", e.message)
         }
     }
@@ -36,7 +35,7 @@ internal class CalcKtTest {
     fun wrongOperatorsInStart(){
         try {
             parseExpression("*3 + 3")
-        } catch (e: Exception){
+        } catch (e: IllegalArgumentException){
             assertEquals("Wrong the first or the last symbol", e.message)
         }
     }
@@ -45,7 +44,7 @@ internal class CalcKtTest {
     fun wrongOperatorsInMiddle(){
         try {
             parseExpression("+4 */ 33")
-        } catch (e: Exception){
+        } catch (e: IllegalArgumentException){
             assertEquals("Incorrect sequence of operations", e.message)
         }
     }
@@ -54,7 +53,7 @@ internal class CalcKtTest {
     fun wrongOperatorsInEnd(){
         try {
             parseExpression("+4-7 ^ ")
-        } catch (e: Exception){
+        } catch (e: IllegalArgumentException){
             assertEquals("Wrong the first or the last symbol", e.message)
         }
     }
