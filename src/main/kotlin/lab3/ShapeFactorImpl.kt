@@ -1,4 +1,5 @@
 import java.lang.IllegalArgumentException
+import kotlin.math.abs
 import kotlin.math.sqrt
 import kotlin.random.Random
 
@@ -7,11 +8,12 @@ interface Shape {
     fun calcPerimeter(): Double
 }
 
-class Circle (val radius: Double): Shape {
+class Circle(val radius: Double) : Shape {
     init {
         if (radius <= 0)
             throw IllegalArgumentException("Incorrect radius")
     }
+
     override fun calcArea(): Double {
         return Math.PI * radius * radius
     }
@@ -20,11 +22,13 @@ class Circle (val radius: Double): Shape {
         return 2 * Math.PI * radius
     }
 }
-class Square (val sideA: Double): Shape {
+
+class Square(val sideA: Double) : Shape {
     init {
         if (sideA <= 0)
-            throw IllegalArgumentException ("Incorrect side of the square")
+            throw IllegalArgumentException("Incorrect side of the square")
     }
+
     override fun calcArea(): Double {
         return sideA * sideA
     }
@@ -33,10 +37,11 @@ class Square (val sideA: Double): Shape {
         return 4 * sideA
     }
 }
-class Rectangle (val sideA: Double, val sideB: Double): Shape {
+
+class Rectangle(val sideA: Double, val sideB: Double) : Shape {
     init {
         if (sideA <= 0 || sideB <= 0)
-            throw IllegalArgumentException ("Incorrect side of the rectangle")
+            throw IllegalArgumentException("Incorrect side of the rectangle")
     }
 
     override fun calcArea(): Double {
@@ -47,15 +52,17 @@ class Rectangle (val sideA: Double, val sideB: Double): Shape {
         return 2 * (sideA + sideB)
     }
 }
-class Triangle (val sideA: Double, val sideB: Double, val sideC: Double): Shape {
+
+class Triangle(val sideA: Double, val sideB: Double, val sideC: Double) : Shape {
     init {
-        if (sideA <=0 || sideB <= 0 || sideC <= 0
+        if (sideA <= 0 || sideB <= 0 || sideC <= 0
             || sideA + sideB <= sideC
             || sideA + sideC <= sideB
             || sideB + sideC <= sideA
         )
-            throw IllegalArgumentException ("Incorrect side of the triangle")
+            throw IllegalArgumentException("Incorrect side of the triangle")
     }
+
     override fun calcArea(): Double {
         val p: Double = calcPerimeter() / 2
         return sqrt(p * (p - sideA) * (p - sideB) * (p - sideC))
@@ -81,52 +88,38 @@ interface ShapeFactory {
 }
 
 class ShapeFactorImpl : ShapeFactory {
-    //private val max = Double.MAX_VALUE
-    private val max = 9999.9999
-    private val min = 0.0001
-
     override fun createCircle(radius: Double): Circle {
         return Circle(radius)
     }
+
     override fun createSquare(sideA: Double): Square {
         return Square(sideA)
     }
+
     override fun createRectangle(sideA: Double, sideB: Double): Rectangle {
         return Rectangle(sideA, sideB)
     }
+
     override fun createTriangle(sideA: Double, sideB: Double, sideC: Double): Triangle {
         return Triangle(sideA, sideB, sideC)
     }
 
     override fun createRandomCircle(): Circle {
-        println("It's Circle")
-      return Circle(Random.nextDouble(min, max))
+        return Circle(doubleRandom())
     }
 
     override fun createRandomSquare(): Square {
-        println("It's Square")
-        return Square(Random.nextDouble(min, max))
+        return Square(doubleRandom())
     }
 
     override fun createRandomRectangle(): Rectangle {
-        println("It's Rectangle")
-        return Rectangle(Random.nextDouble(min, max), Random.nextDouble(min, max))
+        return Rectangle(doubleRandom(), doubleRandom())
     }
 
     override fun createRandomTriangle(): Triangle {
-        println("It's Triangle")
-        var sideA: Double
-        var sideB: Double
-        var sideC: Double
-        do {
-             sideA = Random.nextDouble(min, max)
-             sideB = Random.nextDouble(min, max)
-             sideC = Random.nextDouble(min, max)
-        }
-        while (sideA + sideB <= sideC
-            || sideA + sideC <= sideB
-            || sideB + sideC <= sideA
-        )
+        val sideA = doubleRandom()
+        val sideB = doubleRandom()
+        val sideC = doubleRandom(abs(sideA - sideB), (sideA + sideB))
         return Triangle(sideA, sideB, sideC)
     }
 
@@ -136,9 +129,12 @@ class ShapeFactorImpl : ShapeFactory {
             2 -> createRandomSquare()
             3 -> createRandomRectangle()
             4 -> createRandomTriangle()
-            else -> throw IllegalArgumentException("Random argument error")
+            else -> throw IllegalStateException("Random argument error")
         }
+    }
 
+    private fun doubleRandom(min: Double = 0.0001, max: Double = 100000.0): Double {
+        return Random.nextDouble(min, max)
     }
 }
 

@@ -4,7 +4,7 @@ import Shape
 import ShapeFactorImpl
 
 fun main () {
-    val factory= ShapeFactorImpl();
+    val factory= ShapeFactorImpl()
     val listOfShapes: List<Shape> = listOf(
         factory.createCircle(3.0), //P = 18,84955592153876, S = 28,27433388230814
         factory.createSquare(7.0), //P = 28, S = 49
@@ -39,8 +39,8 @@ fun main () {
     println("""
         Sum of area: $sumRandomArea
         Sum of Perimeter: $sumRandomPerimeter
-        Min and max value of Area: $minRandomArea and $maxArea
-        Min and max value of Perimeter: $minRandomPerimeter and $maxPerimeter
+        Min and max value of Area: $minRandomArea and $maxRandomArea
+        Min and max value of Perimeter: $minRandomPerimeter and $maxRandomPerimeter
     """.trimIndent())
     println("_____________________________________________________________________")
 
@@ -56,11 +56,11 @@ fun main () {
     val maxRandom2Area = listOfRandomShapes2.maxOfOrNull { it.calcArea() }
     val minRandom2Perimeter = listOfRandomShapes2.minOfOrNull { it.calcPerimeter() }
     val maxRandom2Perimeter = listOfRandomShapes2.maxOfOrNull { it.calcPerimeter() }
-    println("""
+    println(""" Random shapes.
         Sum of area: $sumRandom2Area
         Sum of Perimeter: $sumRandom2Perimeter
-        Min and max value of Area: $minRandom2Area and $maxArea
-        Min and max value of Perimeter: $minRandom2Perimeter and $maxPerimeter
+        Min and max value of Area: $minRandom2Area and $maxRandom2Area
+        Min and max value of Perimeter: $minRandom2Perimeter and $maxRandom2Perimeter
     """.trimIndent())
 
 }

@@ -9,42 +9,47 @@ import kotlin.math.PI
 
 internal class ShapeTest {
     companion object {
-         val factory: ShapeFactory = ShapeFactorImpl()
+        val factory: ShapeFactory = ShapeFactorImpl()
     }
+
     @Test
-    fun circleException () {
+    fun circleException() {
         try {
             factory.createCircle(12.0)
-        } catch (e: IllegalArgumentException){
+        } catch (e: IllegalArgumentException) {
             fail()
         }
     }
+
     @Test
-    fun squareException () {
+    fun squareException() {
         try {
             factory.createSquare(2.0)
         } catch (e: IllegalArgumentException) {
             fail()
         }
     }
+
     @Test
-    fun rectangleException () {
+    fun rectangleException() {
         try {
             factory.createRectangle(2.0, 4.0)
         } catch (e: IllegalArgumentException) {
             fail()
         }
     }
+
     @Test
-    fun triangleException_negative () {
+    fun triangleException_negative() {
         try {
             factory.createTriangle(3.0, 4.0, 5.0)
         } catch (e: IllegalArgumentException) {
             fail()
         }
     }
+
     @Test
-    fun triangleException_sizeOfSide () {
+    fun triangleException_sizeOfSide() {
         try {
             factory.createTriangle(2.0, 4.0, 5.0)
         } catch (e: IllegalArgumentException) {
@@ -96,14 +101,14 @@ internal class ShapeTest {
 
     @Test
     fun triangleArea() {
-        val triangle = factory.createTriangle(3.0,4.0,5.0)
+        val triangle = factory.createTriangle(3.0, 4.0, 5.0)
         assertEquals(6.0, triangle.calcArea())
         assertNotEquals(12.0, triangle.calcArea())
     }
 
     @Test
     fun trianglePerimeter() {
-        val triangle = factory.createTriangle(3.0,4.0,5.0)
+        val triangle = factory.createTriangle(3.0, 4.0, 5.0)
         assertEquals(12.0, triangle.calcPerimeter())
         assertNotEquals(6.0, triangle.calcPerimeter())
     }
