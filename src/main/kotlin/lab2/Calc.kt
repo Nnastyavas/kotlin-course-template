@@ -3,7 +3,7 @@ package lab2
 import java.util.*
 import kotlin.math.pow
 
-val operators = hashSetOf("+", "-", "*", "/", "^")
+private val operators = hashSetOf("+", "-", "*", "/", "^")
 
 fun parseExpression(Expr: String): Double {
     val stack: Stack<String> = Stack()
