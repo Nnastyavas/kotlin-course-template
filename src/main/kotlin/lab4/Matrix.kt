@@ -16,10 +16,10 @@ class Matrix(var matrix: Array<Array<Double>>) {
     //Инициализация матрицы
     init {
         if (matrix.isEmpty() || matrix[0].isEmpty())
-            throw Exception ("Matrix is empty")
+            throw IllegalArgumentException("Matrix is empty")
         matrix.forEach {
             if (it.size != getColumns())
-                throw Exception ("Size of the rows must be the same")
+                throw IllegalArgumentException("Size of the rows must be the same")
         }
     }
 
@@ -35,7 +35,7 @@ class Matrix(var matrix: Array<Array<Double>>) {
     // Операции + - * (создание новой матрицы)
     operator fun plus(other: Matrix): Matrix {
         if (getRows() == other.getRows() && getColumns() == other.getColumns()) {
-            val otherMatrix: Array<Array<Double>> = Array(getRows()) { Array(getColumns()) {0.0} }
+            val otherMatrix: Array<Array<Double>> = Array(getRows()) { Array(getColumns()) { 0.0 } }
             for (i in 0 until rows) {
                 for (j in 0 until columns) {
                     otherMatrix[i][j] += matrix[i][j] + other.matrix[i][j]
@@ -43,12 +43,12 @@ class Matrix(var matrix: Array<Array<Double>>) {
             }
             return Matrix(otherMatrix)
         }
-        throw Exception("Wrong size of matrix")
+        throw IllegalArgumentException("Wrong size of matrix")
     }
 
     operator fun minus(other: Matrix): Matrix {
         if (getRows() == other.getRows() && getColumns() == other.getColumns()) {
-            val otherMatrix: Array<Array<Double>> = Array(getRows()) { Array(getColumns()) {0.0} }
+            val otherMatrix: Array<Array<Double>> = Array(getRows()) { Array(getColumns()) { 0.0 } }
             for (i in 0 until getRows()) {
                 for (j in 0 until getColumns()) {
                     otherMatrix[i][j] += matrix[i][j] - other.matrix[i][j]
@@ -56,7 +56,7 @@ class Matrix(var matrix: Array<Array<Double>>) {
             }
             return Matrix(otherMatrix)
         }
-        throw Exception("Wrong size of matrix")
+        throw IllegalArgumentException("Wrong size of matrix")
     }
 
     operator fun times(other: Matrix): Matrix {
@@ -70,7 +70,7 @@ class Matrix(var matrix: Array<Array<Double>>) {
                 }
             }
             return Matrix(otherMatrix)
-        } else throw Exception("Columns are not equal to rows")
+        } else throw IllegalArgumentException("Columns are not equal to rows")
     }
 
     // Операции += -= *= (модификация операций слева)
@@ -81,7 +81,7 @@ class Matrix(var matrix: Array<Array<Double>>) {
                     matrix[i][j] += other[i, j]
                 }
             }
-        } else throw Exception("Wrong size of matrix")
+        } else throw IllegalArgumentException("Wrong size of matrix")
     }
 
     operator fun minusAssign(other: Matrix) {
@@ -91,7 +91,7 @@ class Matrix(var matrix: Array<Array<Double>>) {
                     matrix[i][j] -= other[i, j]
                 }
             }
-        } else throw Exception("Wrong size of matrix")
+        } else throw IllegalArgumentException("Wrong size of matrix")
     }
 
     operator fun timesAssign(other: Matrix) {
@@ -105,7 +105,7 @@ class Matrix(var matrix: Array<Array<Double>>) {
                 }
             }
             matrix = tempMatrix
-        } else throw Exception("Columns are not equal to rows")
+        } else throw IllegalArgumentException("Columns are not equal to rows")
     }
 
     //Умножение и деление на скаляр (создание новой матрицы)
@@ -121,7 +121,7 @@ class Matrix(var matrix: Array<Array<Double>>) {
     operator fun div(scalar: Double): Matrix {
         val otherMatrix: Array<Array<Double>> = Array(getRows()) { Array(getColumns()) { 0.0 } }
         if (scalar == 0.0)
-            throw Exception ("Division by zero is not possible")
+            throw ArithmeticException("Division by zero is not possible")
         for (i in 0 until getRows()) {
             for (j in 0 until getColumns()) {
                 otherMatrix[i][j] += (matrix[i][j] / scalar)
@@ -140,7 +140,7 @@ class Matrix(var matrix: Array<Array<Double>>) {
 
     operator fun divAssign(scalar: Double) {
         if (scalar == 0.0)
-            throw Exception ("Division by zero is not possible")
+            throw ArithmeticException("Division by zero is not possible")
         for (i in 0 until getRows()) {
             for (j in 0 until getColumns()) {
                 matrix[i][j] = (matrix[i][j] / scalar)
@@ -153,7 +153,7 @@ class Matrix(var matrix: Array<Array<Double>>) {
         for (i in 0 until getRows()) {
             for (j in 0 until getColumns()) {
                 if (matrix[i][j] != 0.0)
-                    matrix[i][j] = -matrix [i][j]
+                    matrix[i][j] = -matrix[i][j]
             }
         }
         return Matrix(matrix)
@@ -164,13 +164,13 @@ class Matrix(var matrix: Array<Array<Double>>) {
     }
 
     //Сравнение двух матриц ==
-    override operator fun equals (other: Any?): Boolean {
-       val temp: Matrix = other as Matrix
+    override operator fun equals(other: Any?): Boolean {
+        val temp: Matrix = other as Matrix
         if (temp.getColumns() != getColumns() || temp.getRows() != getRows())
             return false
         for (i in 0 until getRows())
             for (j in 0 until getColumns())
-                if (matrix[i][j] != temp[i,j])
+                if (matrix[i][j] != temp[i, j])
                     return false
         return true
     }
@@ -180,7 +180,7 @@ class Matrix(var matrix: Array<Array<Double>>) {
         var str = ""
         for (element in matrix) {
             for (j in 0 until matrix[0].size) {
-                str+="["
+                str += "["
                 str += element[j].toString()
                 str += "]"
             }
