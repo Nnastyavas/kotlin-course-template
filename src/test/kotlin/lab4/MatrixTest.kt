@@ -146,7 +146,7 @@ internal class MatrixTest {
                 arrayOf(7.0, 8.0)
             )
         )
-        assertEquals("[3, 2]", matrix.size())
+        assertEquals("[3, 2]", "[${matrix.rows}, ${matrix.columns}]")
     }
 
     @Test

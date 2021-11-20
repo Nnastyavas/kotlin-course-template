@@ -62,9 +62,9 @@ fun main() {
         )
     )
     println("Первая матрица:\n$matrix5")
-    println("Размерность первой матрицы:\n${matrix5.size()}")
+    println("Размерность первой матрицы: [${matrix5.rows}, ${matrix5.columns}]")
     println("\nВторая матрица:\n$matrix6")
-    println("Размерность второй матрицы:\n${matrix6.size()}")
+    println("Размерность второй матрицы: [${matrix6.rows}, ${matrix6.columns}]")
     println("\nУмножение двух матриц * (Создание новой матрицы): \n ${matrix5 * matrix6}")
     println("Проверка индекса [0, 0] первой матрицы: " + matrix5[0, 0])
     matrix5 *= matrix6
@@ -129,5 +129,4 @@ fun main() {
     println("Изменение по индексу. Матрица1[0,1] = ${other1[0, 1]})")
     other1[0, 1] = 3.0
     println("После изменения. Матрица1[0,1] = ${other1[0, 1]})")
-
 }

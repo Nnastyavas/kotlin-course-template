@@ -1,26 +1,23 @@
 package lab4
 
-class Matrix(var matrix: Array<Array<Double>>) {
+class Matrix(private val _matrix: Array<Array<Double>>) {
 
-    private val columns: Int = matrix[0].size //колонки
-    private val rows: Int = matrix.size //строки
-
-    // Просмотр размерностей матрицы
-    private fun getColumns(): Int = columns
-    private fun getRows(): Int = rows
-
-    fun size(): String {
-        return ("[${getRows()}, ${getColumns()}]")
-    }
+    private var matrix: Array<Array<Double>> = emptyArray()
+    val columns: Int = _matrix[0].size
+    val rows: Int = _matrix.size
 
     //Инициализация матрицы
     init {
-        if (matrix.isEmpty() || matrix[0].isEmpty())
+        if (_matrix.isEmpty() || _matrix[0].isEmpty())
             throw IllegalArgumentException("Matrix is empty")
-        matrix.forEach {
-            if (it.size != getColumns())
+        _matrix.forEach {
+            if (it.size != columns)
                 throw IllegalArgumentException("Size of the rows must be the same")
         }
+        matrix = Array(rows) { Array(columns) { 0.0 } }
+        for (i in 0 until rows)
+            for (j in 0 until columns)
+                matrix[i][j] = _matrix[i][j]
     }
 
     //Просмотр значения элемента в позиции (i,j) и изменения этого элемента
@@ -34,8 +31,8 @@ class Matrix(var matrix: Array<Array<Double>>) {
 
     // Операции + - * (создание новой матрицы)
     operator fun plus(other: Matrix): Matrix {
-        if (getRows() == other.getRows() && getColumns() == other.getColumns()) {
-            val otherMatrix: Array<Array<Double>> = Array(getRows()) { Array(getColumns()) { 0.0 } }
+        if (rows == other.rows && columns == other.columns) {
+            val otherMatrix: Array<Array<Double>> = Array(rows) { Array(columns) { 0.0 } }
             for (i in 0 until rows) {
                 for (j in 0 until columns) {
                     otherMatrix[i][j] += matrix[i][j] + other.matrix[i][j]
@@ -47,10 +44,10 @@ class Matrix(var matrix: Array<Array<Double>>) {
     }
 
     operator fun minus(other: Matrix): Matrix {
-        if (getRows() == other.getRows() && getColumns() == other.getColumns()) {
-            val otherMatrix: Array<Array<Double>> = Array(getRows()) { Array(getColumns()) { 0.0 } }
-            for (i in 0 until getRows()) {
-                for (j in 0 until getColumns()) {
+        if (rows == other.rows && columns == other.columns) {
+            val otherMatrix: Array<Array<Double>> = Array(rows) { Array(columns) { 0.0 } }
+            for (i in 0 until rows) {
+                for (j in 0 until columns) {
                     otherMatrix[i][j] += matrix[i][j] - other.matrix[i][j]
                 }
             }
@@ -60,11 +57,11 @@ class Matrix(var matrix: Array<Array<Double>>) {
     }
 
     operator fun times(other: Matrix): Matrix {
-        if (getColumns() == other.getRows()) {
-            val otherMatrix: Array<Array<Double>> = Array(getRows()) { Array(other.getColumns()) { 0.0 } }
-            for (i in 0 until getRows()) {
-                for (j in 0 until other.getColumns()) {
-                    for (k: Int in 0 until getColumns()) {
+        if (columns == other.rows) {
+            val otherMatrix: Array<Array<Double>> = Array(rows) { Array(other.columns) { 0.0 } }
+            for (i in 0 until rows) {
+                for (j in 0 until other.columns) {
+                    for (k: Int in 0 until columns) {
                         otherMatrix[i][j] += matrix[i][k] * other.matrix[k][j]
                     }
                 }
@@ -75,9 +72,9 @@ class Matrix(var matrix: Array<Array<Double>>) {
 
     // Операции += -= *= (модификация операций слева)
     operator fun plusAssign(other: Matrix) {
-        if (getColumns() == other.getColumns() && getRows() == other.getRows()) {
-            for (i in 0 until getRows()) {
-                for (j in 0 until getColumns()) {
+        if (columns == other.columns && rows == other.rows) {
+            for (i in 0 until rows) {
+                for (j in 0 until columns) {
                     matrix[i][j] += other[i, j]
                 }
             }
@@ -85,9 +82,9 @@ class Matrix(var matrix: Array<Array<Double>>) {
     }
 
     operator fun minusAssign(other: Matrix) {
-        if (getColumns() == other.getColumns() && getRows() == other.getRows()) {
-            for (i in 0 until getRows()) {
-                for (j in 0 until getColumns()) {
+        if (columns == other.columns && rows == other.rows) {
+            for (i in 0 until rows) {
+                for (j in 0 until columns) {
                     matrix[i][j] -= other[i, j]
                 }
             }
@@ -95,11 +92,11 @@ class Matrix(var matrix: Array<Array<Double>>) {
     }
 
     operator fun timesAssign(other: Matrix) {
-        if (getColumns() == other.getRows()) {
-            val tempMatrix: Array<Array<Double>> = Array(getRows()) { Array(other.getColumns()) { 0.0 } }
-            for (i in 0 until getRows()) {
-                for (j in 0 until other.getColumns()) {
-                    for (k: Int in 0 until getColumns()) {
+        if (columns == other.rows) {
+            val tempMatrix: Array<Array<Double>> = Array(rows) { Array(other.columns) { 0.0 } }
+            for (i in 0 until rows) {
+                for (j in 0 until other.columns) {
+                    for (k: Int in 0 until columns) {
                         tempMatrix[i][j] += matrix[i][k] * other.matrix[k][j]
                     }
                 }
@@ -110,20 +107,20 @@ class Matrix(var matrix: Array<Array<Double>>) {
 
     //Умножение и деление на скаляр (создание новой матрицы)
     operator fun times(scalar: Double): Matrix {
-        val otherMatrix: Array<Array<Double>> = Array(getRows()) { Array(getColumns()) { 0.0 } }
-        for (i in 0 until getRows()) {
-            for (j in 0 until getColumns())
+        val otherMatrix: Array<Array<Double>> = Array(rows) { Array(columns) { 0.0 } }
+        for (i in 0 until rows) {
+            for (j in 0 until columns)
                 otherMatrix[i][j] += (matrix[i][j] * scalar)
         }
         return Matrix(otherMatrix)
     }
 
     operator fun div(scalar: Double): Matrix {
-        val otherMatrix: Array<Array<Double>> = Array(getRows()) { Array(getColumns()) { 0.0 } }
+        val otherMatrix: Array<Array<Double>> = Array(rows) { Array(columns) { 0.0 } }
         if (scalar == 0.0)
             throw ArithmeticException("Division by zero is not possible")
-        for (i in 0 until getRows()) {
-            for (j in 0 until getColumns()) {
+        for (i in 0 until rows) {
+            for (j in 0 until columns) {
                 otherMatrix[i][j] += (matrix[i][j] / scalar)
             }
         }
@@ -132,8 +129,8 @@ class Matrix(var matrix: Array<Array<Double>>) {
 
     //Умножение и деление на скаляр (Модификация матрицы слева)
     operator fun timesAssign(scalar: Double) {
-        for (i in 0 until getRows()) {
-            for (j in 0 until getColumns())
+        for (i in 0 until rows) {
+            for (j in 0 until columns)
                 matrix[i][j] = (matrix[i][j] * scalar)
         }
     }
@@ -141,8 +138,8 @@ class Matrix(var matrix: Array<Array<Double>>) {
     operator fun divAssign(scalar: Double) {
         if (scalar == 0.0)
             throw ArithmeticException("Division by zero is not possible")
-        for (i in 0 until getRows()) {
-            for (j in 0 until getColumns()) {
+        for (i in 0 until rows) {
+            for (j in 0 until columns) {
                 matrix[i][j] = (matrix[i][j] / scalar)
             }
         }
@@ -150,8 +147,8 @@ class Matrix(var matrix: Array<Array<Double>>) {
 
     // Операторы унарного минуса и унарного плюса
     operator fun unaryMinus(): Matrix {
-        for (i in 0 until getRows()) {
-            for (j in 0 until getColumns()) {
+        for (i in 0 until rows) {
+            for (j in 0 until columns) {
                 if (matrix[i][j] != 0.0)
                     matrix[i][j] = -matrix[i][j]
             }
@@ -166,10 +163,10 @@ class Matrix(var matrix: Array<Array<Double>>) {
     //Сравнение двух матриц ==
     override operator fun equals(other: Any?): Boolean {
         val temp: Matrix = other as Matrix
-        if (temp.getColumns() != getColumns() || temp.getRows() != getRows())
+        if (temp.columns != columns || temp.rows != rows)
             return false
-        for (i in 0 until getRows())
-            for (j in 0 until getColumns())
+        for (i in 0 until rows)
+            for (j in 0 until columns)
                 if (matrix[i][j] != temp[i, j])
                     return false
         return true
