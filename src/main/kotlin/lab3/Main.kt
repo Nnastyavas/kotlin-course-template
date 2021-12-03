@@ -1,8 +1,5 @@
 package lab3
 
-import Shape
-import ShapeFactorImpl
-
 fun main() {
     val factory = ShapeFactorImpl()
     val listOfShapes: List<Shape> = listOf(
