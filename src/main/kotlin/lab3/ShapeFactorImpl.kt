@@ -1,3 +1,5 @@
+package lab3
+
 import java.lang.IllegalArgumentException
 import kotlin.math.abs
 import kotlin.math.sqrt
