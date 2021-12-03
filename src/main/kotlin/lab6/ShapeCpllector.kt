@@ -1,7 +1,5 @@
 package lab6
-
-import Circle
-import Shape
+import lab3.*
 
 object ShapeComparators {
     val areaAsc = compareBy<Shape> { it.calcArea() }
@@ -31,6 +29,11 @@ class ShapeCollector<T : Shape> {
         return allShapes.sortedWith(comparator)
     }
 
+    fun getAllByClass(shapeClass: Class<out T>): List<T> {
+        return allShapes.filter {
+            it::class.java == shapeClass
+        }
+    }
 }
 
 
