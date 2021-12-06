@@ -22,7 +22,7 @@ class ShapeCollector<T : Shape> {
     }
 
     fun getAll(): List<T> {
-        return allShapes
+        return allShapes.toList()
     }
 
     fun getAllSorted(comparator: Comparator<in T>): List<T> {
@@ -30,9 +30,7 @@ class ShapeCollector<T : Shape> {
     }
 
     fun getAllByClass(shapeClass: Class<out T>): List<T> {
-        return allShapes.filter {
-            it::class.java == shapeClass
-        }
+        return allShapes.filterIsInstance(shapeClass)
     }
 }
 
