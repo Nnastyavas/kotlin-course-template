@@ -94,15 +94,15 @@ class LibraryService : LibraryServiceInterface {
 
     override fun takeBook(user: User, book: Book) {
         if (!userList.contains(user))
-            throw NoSuchElementException ("User not found")
+            throw NoSuchElementException("User not found")
         if (!bookList.contains(book))
-            throw NoSuchElementException ("Book not found")
+            throw NoSuchElementException("Book not found")
         if (bookList[book] == Status.Restoration)
-            throw IllegalStateException ("Book in Restoration")
+            throw IllegalStateException("Book in Restoration")
         if (bookList[book] == Status.ComingSoon)
-            throw IllegalStateException ("Book is coming soon")
+            throw IllegalStateException("Book is coming soon")
         if (bookList.filter { it.value == Status.UsedBy(user) }.size >= 3)
-            throw IllegalStateException ("User can't take more than 3 books")
+            throw IllegalStateException("User can't take more than 3 books")
         bookList[book] = Status.UsedBy(user)
     }
 

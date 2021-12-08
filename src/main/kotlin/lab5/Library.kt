@@ -17,8 +17,8 @@ class Author(val firstName: String, val lastName: String) {
     }
 }
 
-class User (val firstName: String, val lastName: String) {
-    override fun toString ():String {
+class User(val firstName: String, val lastName: String) {
+    override fun toString(): String {
         return " $firstName $lastName"
     }
 }
@@ -36,8 +36,8 @@ sealed class Status {
     object ComingSoon : Status()
     object Restoration : Status()
 
-    override fun toString (): String {
-        return when (this){
+    override fun toString(): String {
+        return when (this) {
             is Available -> "Available"
             is ComingSoon -> "Coming soon"
             is Restoration -> "Restoration"
@@ -51,7 +51,12 @@ interface LibraryServiceInterface {
     fun findBooks(author: Author): List<Book>
     fun findBooks(year: Int): List<Book>
     fun findBooks(genre: Genre): List<Book>
-    fun findBooks (substring: String? = null, author: Author? = null, year: Int? = null, genre: Genre? = null): List<Book>
+    fun findBooks(
+        substring: String? = null,
+        author: Author? = null,
+        year: Int? = null,
+        genre: Genre? = null
+    ): List<Book>
 
     fun getAllBooks(): List<Book>
     fun getAllAvailableBooks(): List<Book>
