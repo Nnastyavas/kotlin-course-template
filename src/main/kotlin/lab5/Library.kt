@@ -1,6 +1,6 @@
 package lab5
 
-class Book(
+data class Book(
     val name: String,
     val author: List<Author>,
     val genre: Genre,
@@ -11,13 +11,13 @@ class Book(
     }
 }
 
-class Author(val firstName: String, val lastName: String) {
+data class Author(val firstName: String, val lastName: String) {
     override fun toString(): String {
         return "Author: $firstName $lastName"
     }
 }
 
-class User(val firstName: String, val lastName: String) {
+data class User(val firstName: String, val lastName: String) {
     override fun toString(): String {
         return " $firstName $lastName"
     }
